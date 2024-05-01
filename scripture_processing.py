@@ -1,4 +1,4 @@
-import json, pickle
+import json, pickle, os
 
 def load_data(filepath):
     with open(filepath) as f:
@@ -26,7 +26,34 @@ def process_data(data, nlp):
     return docs
 
 def preprocess_flat(nlp, file_names, processed_data_file_path):
-    for file in file_names:
-        data = load_data(f'data/scriptures/flat/{file}.json')
-        docs = process_data(data, nlp)
-        save_processed_data(docs, f'{processed_data_file_path}/{file}.pkl')
+    if not os.path.exists(processed_data_file_path):
+        os.makedirs(processed_data_file_path)
+    try:
+        for file in file_names:
+            load_processed_data(f'{processed_data_file_path}/{file}.pkl')
+    except:
+        print('Processing data...')
+        for file in file_names:
+            data = load_data(f'data/scriptures/flat/{file}.json')
+            docs = process_data(data, nlp)
+            save_processed_data(docs, f'{processed_data_file_path}/{file}.pkl')
+
+def named_entity_recognition(data, nlp, types=[]):
+    name_dic = {}
+
+    for entry in data:
+        doc = nlp(entry['text'])
+        for ent in doc.ents:
+            if ent.label_ in types:
+                if ent.text not in name_dic:
+                    name_dic[ent.text] = 1
+                else:
+                    name_dic[ent.text] += 1
+    return name_dic
+
+    # for doc in processed_data:
+    #     for ent in doc.ents:
+    #         if ent.label_ in ['PERSON', 'ORG', 'GPE']:
+    #             if name_dic[ent.text] is None:
+    #                 name_dic[ent.text] = 1
+    #             name_dic[ent.text] += 1
