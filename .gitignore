@@ -1,0 +1,5 @@
+# Large pre-processed data files
+*.pkl
+
+# IDE files
+.vscode
