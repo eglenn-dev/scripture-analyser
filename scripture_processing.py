@@ -1,6 +1,6 @@
 import json, pickle, os
 
-def load_data(filepath):
+def load_json_data(filepath):
     with open(filepath) as f:
         data = json.load(f)
     return data.get('verses', [])
@@ -13,7 +13,7 @@ def load_processed_data(file_path):
     with open(file_path, 'rb') as f:
         return pickle.load(f)
 
-def save_data(data, filepath):
+def save_json_data(data, filepath):
     with open(filepath, 'w') as f:
         json.dump(data, f)
 
@@ -34,7 +34,7 @@ def check_processed_existence(directory, files):
             return False
     return True
 
-def preprocess_flat(nlp, file_names, processed_data_file_path):
+def preprocess_flat_json(nlp, file_names, processed_data_file_path):
     if not os.path.exists(processed_data_file_path):
         os.makedirs(processed_data_file_path)
     try:
@@ -45,7 +45,7 @@ def preprocess_flat(nlp, file_names, processed_data_file_path):
     except:
         print('Error loading data, processing data again...')
         for file in file_names:
-            data = load_data(f'data/scriptures/flat/{file}.json')
+            data = load_json_data(f'data/scriptures/flat/{file}.json')
             docs = process_data(data, nlp)
             save_processed_data(docs, f'{processed_data_file_path}/pf-{file}.pkl')
         print('Data processed successfully')
