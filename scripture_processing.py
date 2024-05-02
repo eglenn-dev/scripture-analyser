@@ -29,20 +29,21 @@ def preprocess_flat(nlp, file_names, processed_data_file_path):
     if not os.path.exists(processed_data_file_path):
         os.makedirs(processed_data_file_path)
     try:
+        print('Attempting to load processed data...')
         for file in file_names:
-            load_processed_data(f'{processed_data_file_path}/{file}.pkl')
+            load_processed_data(f'{processed_data_file_path}/pf-{file}.pkl')
+        print('Processed data loaded successfully')
     except:
-        print('Processing data...')
+        print('Error loading data, processing data again...')
         for file in file_names:
             data = load_data(f'data/scriptures/flat/{file}.json')
             docs = process_data(data, nlp)
-            save_processed_data(docs, f'{processed_data_file_path}/{file}.pkl')
+            save_processed_data(docs, f'{processed_data_file_path}/pf-{file}.pkl')
+        print('Data processed successfully')
 
-def named_entity_recognition(data, nlp, types=[]):
+def named_entity_recognition(processed_data, nlp, types=[]):
     name_dic = {}
-
-    for entry in data:
-        doc = nlp(entry['text'])
+    for doc in processed_data:
         for ent in doc.ents:
             if ent.label_ in types:
                 if ent.text not in name_dic:
@@ -50,10 +51,3 @@ def named_entity_recognition(data, nlp, types=[]):
                 else:
                     name_dic[ent.text] += 1
     return name_dic
-
-    # for doc in processed_data:
-    #     for ent in doc.ents:
-    #         if ent.label_ in ['PERSON', 'ORG', 'GPE']:
-    #             if name_dic[ent.text] is None:
-    #                 name_dic[ent.text] = 1
-    #             name_dic[ent.text] += 1

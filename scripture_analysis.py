@@ -11,10 +11,12 @@ OUTPUT_FILE_PATH = 'output'
 def main():
     file_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
     preprocess_flat(nlp, file_names, PROCESSED_DATA_FILE_PATH)
-    bom = load_data(f'{SCRIPTURE_DATA_FILE_PATH}/flat/bom.json')
-    name_dic = named_entity_recognition(bom, nlp, types=['PERSON', 'ORG', 'GPE'])
-    print(name_dic['Christ'])
+    p_bom = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/pf-bom.pkl')
+    name_dic = named_entity_recognition(p_bom, nlp, types=['PERSON'])
+    print(name_dic['Jesus Christ'])
 
 if __name__ == '__main__':
+    start_time = dt.datetime.now()
     main()
-    print(f'Processing completed at {dt.datetime.now()}')
+    end_time = dt.datetime.now()
+    print(f'Processing completed at {end_time} in {end_time - start_time}')
