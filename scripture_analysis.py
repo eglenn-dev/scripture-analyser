@@ -19,9 +19,11 @@ def main():
     for i, book in enumerate(book_names):
         print(f'{i+1}. {book.upper()}')
     user_book = input('Enter the book you would like to analyze: ').lower()
-    if user_book not in book_names:
+    if (user_book not in book_names) and (user_book not in [str(i+1) for i in range(len(book_names))]):
         print('Invalid book name entered, exiting program...')
         return
+    if user_book in [str(i+1) for i in range(len(book_names))]:
+        user_book = book_names[int(user_book)-1]
     processed_book = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/pf-{user_book}.pkl')
     name_dic = named_entity_recognition(processed_book, nlp, types=['PERSON'])
     print('Top 10 Names:')
