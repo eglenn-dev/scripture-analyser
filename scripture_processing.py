@@ -25,6 +25,15 @@ def process_data(data, nlp):
         docs.append(doc)
     return docs
 
+def check_processed_existence(directory, files):
+    dir_files = os.listdir(directory)
+    if len(dir_files) != len(files):
+        return False
+    for file in dir_files:
+        if file not in files:
+            return False
+    return True
+
 def preprocess_flat(nlp, file_names, processed_data_file_path):
     if not os.path.exists(processed_data_file_path):
         os.makedirs(processed_data_file_path)
