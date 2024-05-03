@@ -11,15 +11,41 @@ OUTPUT_FILE_PATH = 'output'
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Scripture Analysis Program')
-    print('1. Named Entity Recognition')
+    print('1. Book Most Popular Names in a Book (NER)')
+    print('2. Which Book References Jesus Christ the Most? (NER)')
     print('3. Exit Program')
     user_input = input('Enter the number of the option you would like to run: ')
     if user_input == '1':
         ner()
+    elif user_input == '2':
+        jesus_references()
     elif user_input == '3':
         print('Exiting program...')
     else:
         print('Invalid option entered, exiting program...')
+
+def jesus_references():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
+    if not check_processed_existence(PROCESSED_DATA_FILE_PATH, [f'pf-{book}.pkl' for book in book_names]):
+        preprocess_flat_json(nlp, book_names, PROCESSED_DATA_FILE_PATH)
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print('Program Loaded Successfully!')
+    types = ['PERSON']
+    names = ['jesus', 'christ', 'jesus christ', 'messiah', 'lord', 'son of god', 'son of man', 'savior', 'saviour', 'redeemer', 'the word', 'god']
+    book_dic = {}
+    print('Doing the calculations live, please wait...')
+    for book in book_names:
+        processed_book = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/pf-{book}.pkl')
+        name_dic = named_entity_recognition(processed_book, types=types)
+        book_dic[book] = 0
+        for name in name_dic:
+            if name.lower() in names:
+                book_dic[book] += name_dic[name]
+
+    book_dic = {k: v for k, v in sorted(book_dic.items(), key=lambda item: item[1], reverse=True)}
+    for key, value in book_dic.items():
+        print(f'{key.upper()}: {value}')
 
 def ner():
     os.system('cls' if os.name == 'nt' else 'clear')
