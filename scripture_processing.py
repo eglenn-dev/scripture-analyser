@@ -50,7 +50,7 @@ def preprocess_flat_json(nlp, file_names, processed_data_file_path):
             save_processed_data(docs, f'{processed_data_file_path}/pf-{file}.pkl')
         print('Data processed successfully')
 
-def named_entity_recognition(processed_data, nlp, types=[]):
+def named_entity_recognition(processed_data, types=[]):
     name_dic = {}
     for doc in processed_data:
         for ent in doc.ents:
@@ -60,3 +60,11 @@ def named_entity_recognition(processed_data, nlp, types=[]):
                 else:
                     name_dic[ent.text] += 1
     return name_dic
+
+def get_named_entities(processed_data, types=[]):
+    entities = []
+    for doc in processed_data:
+        for ent in doc.ents:
+            if ent.label_ in types:
+                entities.append(ent.text)
+    return entities

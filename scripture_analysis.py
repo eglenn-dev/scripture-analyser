@@ -24,8 +24,8 @@ def main():
 def ner():
     os.system('cls' if os.name == 'nt' else 'clear')
     book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
-    if not check_processed_existence(f'{PROCESSED_DATA_FILE_PATH}/ner', [f'pf-{book}.pkl' for book in book_names]):
-        preprocess_flat_json(nlp, book_names, f'{PROCESSED_DATA_FILE_PATH}/ner')
+    if not check_processed_existence(PROCESSED_DATA_FILE_PATH, [f'pf-{book}.pkl' for book in book_names]):
+        preprocess_flat_json(nlp, book_names, PROCESSED_DATA_FILE_PATH)
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Program Loaded Successfully!')
     print('Book Options:')
@@ -37,8 +37,8 @@ def ner():
         return
     if user_book in [str(i+1) for i in range(len(book_names))]:
         user_book = book_names[int(user_book)-1]
-    processed_book = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/ner/pf-{user_book}.pkl')
-    name_dic = named_entity_recognition(processed_book, nlp, types=['PERSON'])
+    processed_book = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/pf-{user_book}.pkl')
+    name_dic = named_entity_recognition(processed_book, types=['PERSON'])
     print('Top 10 Names:')
     for name in sorted(name_dic, key=name_dic.get, reverse=True)[:10]:
         print(f'{name}: {name_dic[name]}')
