@@ -31,8 +31,8 @@ def jesus_references():
         preprocess_flat_json(nlp, book_names, PROCESSED_DATA_FILE_PATH)
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Program Loaded Successfully!')
-    types = ['PERSON']
-    names = ['jesus', 'christ', 'jesus christ', 'messiah', 'lord', 'son of god', 'son of man', 'savior', 'saviour', 'redeemer', 'the word', 'god']
+    types = ['PERSON', 'NORP']
+    names = ['jesus', 'christ', 'jesus christ', 'messiah', 'lord', 'son of god', 'son of man', 'savior', 'saviour', 'redeemer', 'the word', 'god', 'the lamb', 'lamb of god', 'only begotten', 'god of israel', 'king of kings', 'lord of lords', 'alpha and omega', 'the beginning and the end', 'the first and the last', 'the light of the world', 'the way the truth and the life', 'the good shepherd', 'the true vine', 'the bread of life', 'the prince of peace', 'the holy one of israel']
     book_dic = {}
     print('Doing the calculations live, please wait...')
     for book in book_names:
