@@ -65,7 +65,7 @@ def ner():
         user_book = book_names[int(user_book)-1]
     processed_book = load_processed_data(f'{PROCESSED_DATA_FILE_PATH}/pf-{user_book}.pkl')
     name_dic = named_entity_recognition(processed_book, types=['PERSON'])
-    print('Top 10 Names:')
+    print(f'Top 10 Names in {user_book.upper()}:')
     for name in sorted(name_dic, key=name_dic.get, reverse=True)[:10]:
         print(f'{name}: {name_dic[name]}')
 
