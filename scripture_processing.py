@@ -25,6 +25,15 @@ def process_data(data, nlp):
         docs.append(doc)
     return docs
 
+def process_data_nlp(data, nlp):
+    all_text = " ".join([item['text'] for item in data])
+    doc = nlp(all_text)
+    return doc
+
+def save_score_data(data, filepath):
+    with open(filepath, 'w') as f:
+        json.dump(data, f)
+
 def check_processed_existence(directory, files):
     dir_files = os.listdir(directory)
     if len(dir_files) != len(files):
@@ -34,21 +43,35 @@ def check_processed_existence(directory, files):
             return False
     return True
 
-def preprocess_flat_json(nlp, file_names, processed_data_file_path):
+def preprocess_nlp(nlp, file_names, processed_data_file_path):
     if not os.path.exists(processed_data_file_path):
         os.makedirs(processed_data_file_path)
-    try:
-        print('Attempting to load processed data...')
-        for file in file_names:
+    for file in file_names:
+        try:
+            print('Attempting to load processed data...')
+            load_processed_data(f'{processed_data_file_path}/nlp-{file}.pkl')
+            print('Processed data loaded successfully')
+        except:
+            print('Error loading data, processing data again...')
+            data = load_json_data(f'data/scriptures/flat/{file}.json')
+            docs = process_data_nlp(data, nlp)
+            save_processed_data(docs, f'{processed_data_file_path}/nlp-{file}.pkl')
+    print('Data processed successfully')
+
+def preprocess_json(nlp, file_names, processed_data_file_path):
+    if not os.path.exists(processed_data_file_path):
+        os.makedirs(processed_data_file_path)
+    for file in file_names:
+        try:
+            print('Attempting to load processed data...')
             load_processed_data(f'{processed_data_file_path}/pf-{file}.pkl')
-        print('Processed data loaded successfully')
-    except:
-        print('Error loading data, processing data again...')
-        for file in file_names:
+            print('Processed data loaded successfully')
+        except:
+            print('Error loading data, processing data again...')
             data = load_json_data(f'data/scriptures/flat/{file}.json')
             docs = process_data(data, nlp)
             save_processed_data(docs, f'{processed_data_file_path}/pf-{file}.pkl')
-        print('Data processed successfully')
+    print('Data processed successfully')
 
 def named_entity_recognition(processed_data, types=[]):
     name_dic = {}
