@@ -46,8 +46,8 @@ def jesus_references():
         for name in name_dic:
             if name.lower() in names:
                 book_dic[book] += name_dic[name]
-
     book_dic = {k: v for k, v in sorted(book_dic.items(), key=lambda item: item[1], reverse=True)}
+    save_json_data(book_dic, f'{OUTPUT_FILE_PATH}/jesus_references.json')
     for key, value in book_dic.items():
         print(f'{key.upper()}: {value}')
 
@@ -69,6 +69,7 @@ def ner():
         user_book = book_names[int(user_book)-1]
     processed_book = load_processed_data(f'{PROCESSED_LIST_DATA_FILE_PATH}/pf-{user_book}.pkl')
     name_dic = named_entity_recognition(processed_book, types=['PERSON'])
+    save_json_data(name_dic, f'{OUTPUT_FILE_PATH}/ner-{user_book}.json')
     print(f'Top 10 Names in {user_book.upper()}:')
     for name in sorted(name_dic, key=name_dic.get, reverse=True)[:10]:
         print(f'{name}: {name_dic[name]}')
@@ -89,9 +90,9 @@ def book_similarity():
             processed_book2 = load_processed_data(f'{PROCESSED_NLP_DATA_FILE_PATH}/nlp-{book2}.pkl')
             similarity_scores[f'{book1};{book2}'] = processed_book1.similarity(processed_book2)
     similarity_scores = {k: v for k, v in sorted(similarity_scores.items(), key=lambda item: item[1], reverse=True)}
+    save_score_data(similarity_scores, f'{OUTPUT_FILE_PATH}/book_similarity_scores.json')
     for key, value in similarity_scores.items():
         print(f'{key.upper()}: {value:.2f}')
-    save_score_data(similarity_scores, f'{OUTPUT_FILE_PATH}/book_similarity_scores.json')
 
 if __name__ == '__main__':
     main()
