@@ -48,6 +48,7 @@ def jesus_references():
                 book_dic[book] += name_dic[name]
     book_dic = {k: v for k, v in sorted(book_dic.items(), key=lambda item: item[1], reverse=True)}
     save_json_data(book_dic, f'{OUTPUT_FILE_PATH}/jesus_references.json')
+    print(f'\nReferences to Jesus Christ by Book: ')
     for key, value in book_dic.items():
         print(f'{key.upper()}: {value}')
 
@@ -91,8 +92,9 @@ def book_similarity():
             similarity_scores[f'{book1};{book2}'] = processed_book1.similarity(processed_book2)
     similarity_scores = {k: v for k, v in sorted(similarity_scores.items(), key=lambda item: item[1], reverse=True)}
     save_score_data(similarity_scores, f'{OUTPUT_FILE_PATH}/book_similarity_scores.json')
+    print(f'\nBook Similarity Scores: ')
     for key, value in similarity_scores.items():
-        print(f'{key.upper()}: {value:.2f}')
+        print(f'{key.upper()}: {value}')
 
 if __name__ == '__main__':
     main()
