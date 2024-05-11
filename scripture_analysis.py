@@ -1,6 +1,8 @@
+# Library and Module imports
 import spacy, os, datetime as dt
 from scripture_processing import *
 
+# Global Variables
 nlp = spacy.load('en_core_web_lg')
 nlp.max_length = 4000000
 DATA_FILE_PATH = 'data'
@@ -9,6 +11,7 @@ PROCESSED_NLP_DATA_FILE_PATH = f'{DATA_FILE_PATH}/processed/nlp'
 SCRIPTURE_DATA_FILE_PATH = f'{DATA_FILE_PATH}/scriptures'
 OUTPUT_FILE_PATH = f'{DATA_FILE_PATH}/output'
 
+# Main Function
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
     print('Scripture Analysis Program')
@@ -16,7 +19,11 @@ def main():
     print('2. Which Book References Jesus Christ the Most? (NER)')
     print('3. Which book is most similar to another book? (NLP)')
     print('4. Exit Program')
+
+    # User Input
     user_input = input('Enter the number of the option you would like to run: ')
+
+    # Running the corresponding function based on the user input
     if user_input == '1':
         ner()
     elif user_input == '2':
@@ -29,6 +36,31 @@ def main():
         print('Invalid option entered, exiting program...')
 
 def jesus_references():
+    """
+    This function calculates the number of references to Jesus Christ in different books.
+    The books are specified by their names in the 'book_names' list.
+    The function uses Named Entity Recognition (NER) to identify references to Jesus Christ.
+    The references are identified by a list of names/titles for Jesus Christ.
+    The function saves the results to a JSON file and also prints them to the console.
+
+    The function performs the following steps:
+    1. Clears the console.
+    2. Checks if the processed data for the books exist. If not, preprocesses the JSON data.
+    3. Clears the console again and prints a success message.
+    4. Defines the entity types and names to look for in the NER.
+    5. Initializes an empty dictionary to hold the results.
+    6. For each book, loads the processed data and performs NER.
+    7. Counts the occurrences of each name in the book and adds the count to the results.
+    8. Sorts the results by the count of references in descending order.
+    9. Saves the results to a JSON file.
+    10. Prints the results to the console.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
     book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
     if not check_processed_existence(PROCESSED_LIST_DATA_FILE_PATH, [f'pf-{book}.pkl' for book in book_names]):
@@ -53,6 +85,29 @@ def jesus_references():
         print(f'{key.upper()}: {value}')
 
 def ner():
+    """
+    This function performs Named Entity Recognition (NER) on a selected book.
+    The books are specified by their names in the 'book_names' list.
+    The function uses the 'PERSON' entity type to identify names in the book.
+    The function saves the results to a JSON file and also prints the top 10 names to the console.
+
+    The function performs the following steps:
+    1. Clears the console.
+    2. Checks if the processed data for the books exist. If not, preprocesses the JSON data.
+    3. Clears the console again and prints a success message.
+    4. Prints the list of book options.
+    5. Asks the user to enter the name of the book they would like to analyze.
+    6. If the user enters an invalid book name, the function prints an error message and returns.
+    7. If the user enters a valid book name, the function loads the processed data for the book.
+    8. Performs NER on the processed data to identify names ('PERSON' entities).
+    9. Saves the results to a JSON file.
+    10. Prints the top 10 names in the book to the console.
+
+    Parameters: None
+
+    Returns:
+    None
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
     book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
     if not check_processed_existence(PROCESSED_LIST_DATA_FILE_PATH, [f'pf-{book}.pkl' for book in book_names]):
@@ -76,6 +131,28 @@ def ner():
         print(f'{name}: {name_dic[name]}')
 
 def book_similarity():
+    """
+    This function calculates the similarity scores between different books.
+    The books are specified by their names in the 'book_names' list.
+    The function uses the spaCy language model's similarity method to calculate the similarity between each pair of books.
+    The function saves the results to a JSON file and also prints them to the console.
+
+    The function performs the following steps:
+    1. Clears the console.
+    2. Checks if the processed data for the books exist. If not, preprocesses the data.
+    3. Clears the console again and prints a success message.
+    4. Initializes an empty dictionary to hold the results.
+    5. For each pair of books, loads the processed data and calculates the similarity score.
+    6. Stores the similarity score in the results dictionary.
+    7. Sorts the results by the similarity score in descending order.
+    8. Saves the results to a JSON file.
+    9. Prints the results to the console.
+
+    Parameters: None
+
+    Returns:
+    None
+    """
     os.system('cls' if os.name == 'nt' else 'clear')
     book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
     if not check_processed_existence(PROCESSED_NLP_DATA_FILE_PATH, [f'nlp-{book}.pkl' for book in book_names]):
