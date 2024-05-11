@@ -1,6 +1,6 @@
 <div align="center"><h1>Scripture Analysis Documentation</h1></div>
 
-<div><code><a href="" target="_blank"></a></code></div>
+<div align="center"><code><a href="https://youtu.be/t__eVNM220Y" target="_blank">Video Demonstration</a></code></div>
 
 ### Quick Links
 
