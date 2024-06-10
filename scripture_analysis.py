@@ -18,7 +18,8 @@ def main():
     print('1. Book Most Popular Names in a Book (NER)')
     print('2. Which Book References Jesus Christ the Most? (NER)')
     print('3. Which book is most similar to another book? (NLP)')
-    print('4. Exit Program')
+    print('4. Which verse is most similar to another? (NLP)')
+    print('5. Exit Program')
 
     # User Input
     user_input = input('Enter the number of the option you would like to run: ')
@@ -31,6 +32,8 @@ def main():
     elif user_input == '3':
         book_similarity()
     elif user_input == '4':
+        compare_verses()
+    elif user_input == '5':
         print('Exiting program...')
     else:
         print('Invalid option entered, exiting program...')
@@ -172,6 +175,49 @@ def book_similarity():
     print(f'\nBook Similarity Scores: ')
     for key, value in similarity_scores.items():
         print(f'{key.upper()}: {value}')
+
+def compare_verses():
+    """
+    This function allows the user to select a book and a specific verse from that book to find similar verses across the same book.
+    The similarity is calculated using the spaCy NLP model's similarity method on the processed text data of the verses.
+    The function performs the following steps:
+    1. Clears the console.
+    2. Displays a list of book options to the user.
+    3. Prompts the user to select a book by entering the book name or the corresponding number.
+    4. If the user enters an invalid book name or number, the function prints an error message and exits.
+    5. Prompts the user to enter the verse they would like to compare.
+    6. Loads the processed data for the selected book.
+    7. Calculates the similarity scores between the selected verse and all other verses in the book.
+    8. Sorts the verses by their similarity scores in descending order.
+    9. Prints the most similar verses to the console, including their references and similarity scores.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
+    os.system('cls' if os.name == 'nt' else 'clear')
+    book_names = ['bom', 'dnc', 'nt', 'ot', 'pogp']
+    for i, book in enumerate(book_names):
+        print(f'{i+1}. {book.upper()}')
+    user_book = input('Enter the book you would like to compare: ')
+    if (user_book not in book_names) and (user_book not in [str(i+1) for i in range(len(book_names))]):
+        print('Invalid book name entered, exiting program...')
+        return
+    if user_book in [str(i+1) for i in range(len(book_names))]:
+        user_book = book_names[int(user_book)-1]
+    user_verse = input(f'Enter the verse you would like to compare from {user_book.upper()}: ')
+    print(f'Selected verse is: {user_verse}')
+    print("Loading data dictionary...")
+    book_dic = create_dictionary(read_json_file(f'{SCRIPTURE_DATA_FILE_PATH}/flat/{user_book}.json'))
+    print('Comparing verses...')
+    similar_verses = find_similar_verses(nlp, user_verse, book_dic)
+    print(f'\nMost Similar Verses to {user_verse}:')
+    for reference, similarity in similar_verses:
+        print(f'Reference: {reference}')
+        print(f'Verse: {book_dic[reference]}')
+        print(f'Similarity: {similarity:.2f}')
 
 if __name__ == '__main__':
     main()

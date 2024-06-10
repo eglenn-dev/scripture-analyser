@@ -1,4 +1,4 @@
-<div align="center"><h1>Scripture Analysis Documentation</h1></div>
+<div align="center"><h1>Scripture Analyser Documentation</h1></div>
 
 <div align="center"><code><a href="https://youtu.be/t__eVNM220Y" target="_blank">Video Demonstration</a></code></div>
 
@@ -8,6 +8,18 @@
 -   [Questions to Answer](#questions)
 -   [Files Needed](#files)
 -   [Menu Overview](#menu)
+
+## Updates
+
+#### June 10, 2024
+
+-   Updated Documentation
+-   Added `compare_verses()` function to `scripture_analysis.py`
+    -   Added functions to support this new function in `scripture_processing.py`
+
+## Preface
+
+This project is a CLI application that is designed to analyze the text of the Bible and other Religous texts. These texts were chosen becuase of their size, complexity, and structure, as well as the fact that they are in the public domain. The goal of this project is to use natural language processing (NLP) to analyze the text of these books and answer some questions about them.
 
 ## Questions <a name="questions"></a>
 

@@ -5,6 +5,11 @@ def load_json_data(filepath):
         data = json.load(f)
     return data.get('verses', [])
 
+def read_json_file(file_path):
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    return data
+
 def save_processed_data(processed_data, file_path):
     with open(file_path, 'wb') as f:
         pickle.dump(processed_data, f)
@@ -91,3 +96,24 @@ def get_named_entities(processed_data, types=[]):
             if ent.label_ in types:
                 entities.append(ent.text)
     return entities
+
+def compare_verses(nlp, doc1, verse2):
+    doc2 = nlp(verse2)
+    return doc1.similarity(doc2)
+
+def find_similar_verses(nlp, target_verse, data_dict):
+    similar_verses = []
+    doc1 = nlp(data_dict[target_verse])
+    for reference, verse in data_dict.items():
+        if reference != target_verse:
+            similarity = compare_verses(nlp, doc1, verse)
+            similar_verses.append((reference, similarity))
+        
+    similar_verses.sort(key=lambda x: x[1], reverse=True)
+    return similar_verses[:3]  
+
+def create_dictionary(json_data):
+    new_dict = {}
+    for item in json_data.get('verses', []):
+        new_dict[item['reference']] = item['text']
+    return new_dict
